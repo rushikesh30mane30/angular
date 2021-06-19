@@ -1,0 +1,198 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 my-2">
+            <h1 class="text-center">Employmee List <span class="float-right">
+                    <button class="btn btn-secondary btn-sm" (click)="addEmp(template)">Add</button></span></h1>
+        </div>
+
+        <div class="col-md-12 my-2">
+        </div>
+
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Name</mat-label>
+                                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
+                                        [matAutocomplete]="auto">
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">
+                                            {{option.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </form>
+                        </th>
+                        <th>
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Address</mat-label>
+                                    <input type="text" placeholder="Pick one" aria-label="Address" matInput [formControl]="myAddControl"
+                                        [matAutocomplete]="auto1">
+                                    <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+                                        <mat-option *ngFor="let option of addrFilteredOptions | async" [value]="option.address.street">
+                                            {{option.address.street}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </form>
+                        </th>
+                        <th>
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Company</mat-label>
+                                    <input type="text" placeholder="Pick one" aria-label="Company" matInput [formControl]="myCompControl"
+                                        [matAutocomplete]="auto2">
+                                    <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+                                        <mat-option *ngFor="let option of companyFilteredOptions | async" [value]="option.company.name">
+                                            {{option.company.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </form>
+                        </th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let employee of employeeList">
+                        <th scope="row">{{employee.name}}</th>
+                        <td>{{employee.address.street}},
+                            {{employee.address.suite}},
+                            {{employee.address.city}}, {{employee.address.zipcode}}
+                        </td>
+                        <td>{{employee.company.name}}</td>
+                        <td><button type="button" class="btn btn-secondary btn-sm mr-2"
+                                (click)="editEmp(template,employee)">Edit</button>
+                            <button type="button" class="btn btn-secondary btn-sm float-right"
+                                (click)="deleteEmp(employee)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 my-2">
+            <h1 class="text-center">Deleted Employmee List </h1>
+        </div>
+        <div class="col-md-12 my-2">
+
+        </div>
+
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let employee of deletedEmployeeList">
+                        <th scope="row">{{employee.name}}</th>
+                        <td>{{employee.address.street}},
+                            {{employee.address.suite}},
+                            {{employee.address.city}}, {{employee.address.zipcode}}
+                        </td>
+                        <td>{{employee.company.name}}</td>
+                        <td><button type="button" class="btn btn-secondary btn-sm"
+                                (click)="restoreEmp(employee)">Restore</button>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group row">
+                <label for="Name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Name"
+                        [(ngModel)]="name" [ngModelOptions]="{standalone: true}">
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="exampleInputAddress">Address :-</label>
+            </div>
+            <!-- <div class="row"> -->
+                <!-- <div class="col-sm-2 "></div> -->
+                <!-- <div class="col-sm-10"> -->
+
+
+                    <div class="form-group row">
+                        <label for="Name" class="col-sm-2 col-form-label">Street</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" aria-describedby="emailHelp"
+                                placeholder="Enter Street" [(ngModel)]="street" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Name" class="col-sm-2 col-form-label">Suite</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" aria-describedby="emailHelp"
+                                placeholder="Enter Suite" [(ngModel)]="suite" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Name" class="col-sm-2 col-form-label">City</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" aria-describedby="emailHelp"
+                                placeholder="Enter City" [(ngModel)]="city" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Name" class="col-sm-2 col-form-label">Zipcode</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" aria-describedby="emailHelp"
+                                placeholder="Enter Zipcode" [(ngModel)]="zipcode" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                <!-- </div> -->
+            <!-- </div> -->
+            <div class="form-group row">
+                <label for="Name" class="col-sm-2 col-form-label">Company</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter Company"
+                        [(ngModel)]="company" [ngModelOptions]="{standalone: true}">
+                </div>
+            </div>
+<hr>
+
+
+            <button type="submit" *ngIf="!isEdit" class="btn btn-primary" (click)="submit()">Submit</button>
+            <button type="submit" *ngIf="isEdit" class="btn btn-primary" (click)="update()">Update</button>
+        </form>
+    </div>
+</ng-template>
+
+
+
